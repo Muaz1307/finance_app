@@ -1,0 +1,39 @@
+<!-- templates/profile.html -->
+{% extends "base.html" %}
+{% block title %}Profile Settings{% endblock %}
+{% block content %}
+  <h2>Profile Settings</h2>
+
+  <form method="post" action="{{ url_for('profile') }}">
+    <h3>Change Username / Password</h3>
+
+    <label for="new_username">New Username</label>
+    <input
+      type="text"
+      name="new_username"
+      id="new_username"
+      value="{{ current_user.username }}"
+      required
+    >
+
+    <label for="current_password">Current Password</label>
+    <input
+      type="password"
+      name="current_password"
+      id="current_password"
+      required
+    >
+
+    <label for="new_password">New Password</label>
+    <input
+      type="password"
+      name="new_password"
+      id="new_password"
+    >
+
+    <button type="submit" name="update_profile" value="1">
+      Update Profile
+    </button>
+  </form>
+{% endblock %}
+

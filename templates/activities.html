@@ -1,0 +1,22 @@
+<!-- templates/activities.html -->
+{% extends "base.html" %}
+{% block title %}Activities{% endblock %}
+{% block content %}
+  <h2>Post an Activity</h2>
+  <form method="post" action="/activities">
+    <label for="content">What's on your mind?</label>
+    <textarea name="content" id="content" rows="3" required></textarea>
+    <button type="submit">Post</button>
+  </form>
+
+  <h3>Recent Activities</h3>
+  {% for p in posts %}
+    <div class="activity-post">
+      <div class="timestamp">{{ p.timestamp }}</div>
+      <div class="content">{{ p.content }}</div>
+      <div class="byline">— {{ p.username if p.username else 'User' }}</div>
+    </div>
+  {% else %}
+    <p>No activities yet.</p>
+  {% endfor %}
+{% endblock %}

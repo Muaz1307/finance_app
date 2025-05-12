@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}My Groups & Chat{% endblock %}
+
+{% block content %}
+  <h2>My Chat Groups</h2>
+
+  <!-- Create new group -->
+  <form method="post" action="{{ url_for('chat') }}">
+    <h3>Create a New Group</h3>
+    <label for="group_name">Group Name</label>
+    <input type="text" name="group_name" id="group_name" required>
+
+    <label for="members">Add Members (comma-separated usernames)</label>
+    <input type="text" name="members" id="members" placeholder="alice,bob,charlie">
+
+    <button type="submit" name="create_group" value="1">Create Group</button>
+  </form>
+
+  <hr>
+
+  <!-- List your groups -->
+  {% if groups %}
+    <ul>
+      {% for g in groups %}
+        <li>
+          <strong>{{ g.name }}</strong>
+          ({{ g.member_count }} members)
+          • <a href="{{ url_for('group_chat', group_id=g.id) }}">Open Chat</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You don’t own any groups yet. Use the form above to create one.</p>
+  {% endif %}
+{% endblock %}

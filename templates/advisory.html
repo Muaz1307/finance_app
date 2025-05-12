@@ -1,0 +1,13 @@
+<!-- templates/advisory.html -->
+{% extends "base.html" %}
+{% block title %}Financial Advisory{% endblock %}
+{% block content %}
+  <h2>Your Monthly Budget Report</h2>
+  <ul class="advice-list">
+    {% for note in advice %}
+      <li>{{ note }}</li>
+    {% else %}
+      <li>No budgets set yet; add some in the Budgets page.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

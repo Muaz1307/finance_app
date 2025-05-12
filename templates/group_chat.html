@@ -1,0 +1,55 @@
+<!-- templates/group_chat.html -->
+{% extends "base.html" %}
+{% block title %}Group Chat – {{ group.name }}{% endblock %}
+
+{% block content %}
+  <h2>Group: {{ group.name }}</h2>
+
+  <div id="chat-box" style="height:300px;overflow-y:auto;border:1px solid #ccc;padding:8px;"></div>
+  <div id="chat-input" style="margin-top:8px;">
+    <input type="text" id="msg" placeholder="Type a message…" autocomplete="off" style="width:80%">
+    <button id="send-btn">Send</button>
+  </div>
+
+  <p><a href="{{ url_for('chat') }}">← Back to Groups</a></p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function fetchMessages() {
+  const box = document.getElementById('chat-box');
+  const res = await fetch(`/groups/{{ group.id }}/messages`);
+  const data = await res.json();
+  box.innerHTML = data.map(m => `
+    <div>
+      <strong>${m.username}</strong>
+      <span style="font-size:.85em;color:#666">[${new Date(m.timestamp).toLocaleTimeString()}]</span>
+      : ${m.content}
+    </div>
+  `).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendMessage() {
+  const inp = document.getElementById('msg');
+  const text = inp.value.trim();
+  if (!text) return;
+  await fetch(`/groups/{{ group.id }}/messages`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({message:text})
+  });
+  inp.value = '';
+  fetchMessages();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('send-btn').onclick = sendMessage;
+  document.getElementById('msg').addEventListener('keypress', e => {
+    if (e.key==='Enter') { e.preventDefault(); sendMessage(); }
+  });
+  fetchMessages();
+  setInterval(fetchMessages, 2000);
+});
+</script>
+{% endblock %}

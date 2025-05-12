@@ -1,0 +1,49 @@
+<!-- templates/allotment.html -->
+{% extends "base.html" %}
+{% block title %}Budgets{% endblock %}
+{% block content %}
+  <h2>Set / Update Your Monthly Budgets</h2>
+  <form method="post" action="{{ url_for('allotment') }}">
+    <label for="category">Category</label>
+    <input type="text" name="category" id="category" required>
+
+    <label for="limit">Monthly Limit</label>
+    <input type="number" step="0.01" name="limit" id="limit" required>
+
+    <button type="submit">Save Budget</button>
+  </form>
+
+  <h3>Current Budgets</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Limit</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in budgets %}
+        <tr>
+          <td>{{ b.category }}</td>
+          <td>{{ "%.2f"|format(b.monthly_limit) }}</td>
+          <td>
+            <form method="post"
+                  action="{{ url_for('delete_budget', budget_id=b.id) }}"
+                  style="display:inline"
+                  onsubmit="return confirm('Delete this budget?');">
+              <button type="submit">🗑️</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="3">No budgets set.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>
+{% endblock %}
+

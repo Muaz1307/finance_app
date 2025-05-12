@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Finance App{% endblock %}</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a> |
+    <a href="/allotment">Budgets</a> |
+    <a href="/expenses">Expenses</a> |
+    <a href="/advisory">Report</a> |
+    <a href="/activities">Activities</a> |
+    <a href="/chat">Chat</a> |
+    <a href="/profile">Profile</a> |
+    <a href="/logout">Logout</a>
+  </nav>
+  <div class="container">
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}
+        <ul class="flashes">
+        {% for cat, m in msgs %}<li class="{{cat}}">{{m}}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
